@@ -1,4 +1,6 @@
 FROM python
+RUN useradd -m -d /app appuser
+USER appuser
 RUN pip install gunicorn redis bottle
 ADD *.py *.pyc /app/
 #ADD requirements.txt /app/
