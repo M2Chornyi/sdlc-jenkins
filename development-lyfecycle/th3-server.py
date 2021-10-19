@@ -8,7 +8,7 @@ from typing import Any, Dict, Callable, Union, List
 import redis
 from bottle import request, response, Bottle
 
-__version__ = "0.0.1"
+__version__ = os.environ.get('TH3_VERSION', "0.0.0")
 
 TRANSLATIONS = {
     "Victory or Death": "Lok'Tar Ogar",
@@ -98,4 +98,4 @@ if __name__ == '__main__':
             print(f"Error connecting to Redis: {redis_err}")
             sys.exit(1)
 
-    app.run(host='0.0.0.0', port=8080, server='gunicorn', workers=1)
+    app.run(host='0.0.0.0', port=8080, server='gunicorn', workers=4)
