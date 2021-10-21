@@ -8,6 +8,11 @@ pipeline {
         text(   name: "NAMESPACE",defaultValue: "default")
     }
     stages {
+        stage('Build docker image'){
+            steps{
+                sh "docker build -t th3-python:${parms.VERSION} "
+            }
+        }
         stage('Verification'){
             steps{
                 sh """if kubectl -n ${params.NAMESPACE} get svc application ; then echo [INFO]: Service exist! ; else echo [INFO]: Creating service... &&  kubectl create -n ${params.NAMESPACE} service loadbalancer application --tcp=8080:8080 --dry-run=client -o yaml | kubectl -n ${params.NAMESPACE} apply -f - ; fi"""

@@ -12,8 +12,14 @@ Using public cloud technology under their free tier is also fine!
       the sample application changed
  
 ## TASKS:
-### Web service:
-Setup NGINX web service to exposure index page with some metadata.
+Setup `blue/green` deployment.
 
+Requirements:
+- Kubernetes cluster
+- Jenkins
+  - Node requirement:
+    - Kubernetes access
+    - Helm installed
+    - Docker installed 
 
     
