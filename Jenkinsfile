@@ -18,11 +18,8 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh """
-                kubectl -n ${params.NAMESPACE} run testbox-${params.STACK} --image=nginx --restart=Never --rm -it -- curl ${params.STACK}-th3-server:8080/version ;
-                for i in "Victory+or+Death" "Lol" "Okay" "Hey" "I+obey" "By+my+Axe" "Well+Met" ; \
-                do kubectl -n ${params.NAMESPACE} run testbox-${params.STACK} --image=nginx --restart=Never --rm -it -- curl ${params.STACK}-th3-server:8080/api/v1/translate?phrase=$i; done
-                """
+                sh "kubectl -n ${params.NAMESPACE} run testbox-${params.STACK} --image=nginx --restart=Never --rm -it -- curl ${params.STACK}-th3-server:8080/version"
+                sh """for i in "Victory+or+Death" "Lol" "Okay" "Hey" "I+obey" "By+my+Axe" "Well+Met" ; do kubectl -n ${params.NAMESPACE} run testbox-${params.STACK} --image=nginx --restart=Never --rm -it -- curl ${params.STACK}-th3-server:8080/api/v1/translate?phrase=${i}; done"""
             }
         }
         stage('Deploy') {
