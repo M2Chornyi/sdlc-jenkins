@@ -18,8 +18,21 @@
   STACK=green ; \
   helm upgrade -i $STACK th3-server --set image.tag=$TH3_VERSION --set stack=$STACK ;
 ```
+### Test: 
+Please run in duplicate terminal window:
+```shell
+ kubectl run testbox --image=nginx --restart=Never --rm -it -- bash
+  # while sleep 2; do curl application/version ; done
+```
 ### Create `appication` service in kubernetes to expose desired application:
 ```shell
-  kubectl create service loadbalancer application --tcp=80:8080 ; \
+#  kubectl create service loadbalancer application --tcp=80:8080 ; \
+  kubectl expose service $STACK-th3-server --name=application --type=LoadBalancer ; \
   kubectl patch service application --type='json' -p='[{"op": "replace", "path": "/spec/selector", "value":{ "stack": "'$STACK'" } }]'
+  # kubectl create ingress blizzard --rule=blue.local/blue/*=blue-th3-server:8080 --rule=green.local/green/*=green-th3-server:8080  --rule=bizzard.local/*=green-th3-server:8080 
+```
+### Switch `service/application` to LIVE stack:
+```shell
+LIVESTACK=green ; \
+kubectl patch service application --type='json' -p='[{"op": "replace", "path": "/spec/selector", "value":{ "stack": "'$LIVESTACK'" } }]'
 ```
