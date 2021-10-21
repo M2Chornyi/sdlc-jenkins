@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Verification'){
             steps{
-                sh """if kubectl -n ${params.NAMESPACE} get svc application ; then echo [INFO]: Service exist! ; else echo [INFO]: Creating service... &&  kubectl create -n ${params.NAMESPACE} service loadbalancer application --tcp=80:8080 --dry-run=client -o yaml | kubectl -n ${params.NAMESPACE} apply -f - ; fi"""
+                sh """if kubectl -n ${params.NAMESPACE} get svc application ; then echo [INFO]: Service exist! ; else echo [INFO]: Creating service... &&  kubectl create -n ${params.NAMESPACE} service loadbalancer application --tcp=8080:8080 --dry-run=client -o yaml | kubectl -n ${params.NAMESPACE} apply -f - ; fi"""
             }
         }
         stage('HELM install') {
@@ -41,7 +41,8 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                sh """kubectl -n ${params.NAMESPACE} patch service application --type='json' -p='[{"op": "replace", "path": "/spec/selector", "value":{ "stack": "${params.STACK}" } }]'"""
+                sh "kubectl -n ${params.NAMESPACE} run testbox-${params.STACK} --image=nginx --restart=Never --rm -it -- curl application:8080/version"
             }
         }
     }
