@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building.. ${params.STACK}'
+                echo "Building.. ${params.STACK}"
                 sh 'kubectl get all'
             }
         }
