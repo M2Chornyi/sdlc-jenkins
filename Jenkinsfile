@@ -40,11 +40,4 @@ pipeline {
             }
         }
     }
-
-    @NonCPS
-    def loop_of_sh(list) {
-        list.each { item ->
-            sh "kubectl -n ${params.NAMESPACE} run testbox-${params.STACK} --image=nginx --restart=Never --rm -it -- curl ${params.STACK}-th3-server:8080/api/v1/translate?phrase=${item}"
-        }
-    }
 }
