@@ -10,12 +10,12 @@ pipeline {
     stages {
         stage('Build docker image'){
             steps{
-                sh """eval \$(minikube -p minikube docker-env) && docker build -t th3-python:${params.VERSION} development-lyfecycle"""
+                sh """cd development-lyfecycle &&  eval \$(minikube -p minikube docker-env) && docker build -t th3-python:${params.VERSION} . """
             }
         }
         stage('Verification'){
             steps{
-                sh """if kubectl -n ${params.NAMESPACE} get svc application ; then echo [INFO]: Service exist! ; else echo [INFO]: Creating service... &&  kubectl create -n ${params.NAMESPACE} service loadbalancer application --tcp=8080:8080 --dry-run=client -o yaml | kubectl -n ${params.NAMESPACE} apply -f - ; fi"""
+                sh """pwd && if kubectl -n ${params.NAMESPACE} get svc application ; then echo [INFO]: Service exist! ; else echo [INFO]: Creating service... &&  kubectl create -n ${params.NAMESPACE} service loadbalancer application --tcp=8080:8080 --dry-run=client -o yaml | kubectl -n ${params.NAMESPACE} apply -f - ; fi"""
             }
         }
         stage('HELM install') {
