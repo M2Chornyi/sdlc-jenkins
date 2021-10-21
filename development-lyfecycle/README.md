@@ -14,8 +14,8 @@
 **NOTE:** in this exercise we assume that the current image is installed on each running node.
 ### Create helm chart for application rollout:
 ```shell
-  TH3_VERSION=0.0.1 ; \
-  STACK=blue ; \
+  TH3_VERSION=0.0.2 ; \
+  STACK=green ; \
   helm upgrade -i $STACK th3-server --set image.tag=$TH3_VERSION --set stack=$STACK ;
 ```
 ### Test: 
@@ -26,7 +26,8 @@ Please run in duplicate terminal window:
 ```
 ### Create `appication` service in kubernetes to expose desired application:
 ```shell
-  kubectl create service loadbalancer application --tcp=80:8080 ; \
+#  kubectl create service loadbalancer application --tcp=80:8080 ; \
+  kubectl expose service $STACK-th3-server --name=application --type=LoadBalancer ; \
   kubectl patch service application --type='json' -p='[{"op": "replace", "path": "/spec/selector", "value":{ "stack": "'$STACK'" } }]'
   # kubectl create ingress blizzard --rule=blue.local/blue/*=blue-th3-server:8080 --rule=green.local/green/*=green-th3-server:8080  --rule=bizzard.local/*=green-th3-server:8080 
 ```
