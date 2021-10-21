@@ -1,3 +1,5 @@
+test_cals = ["Victory+or+Death","Lol","Okay","Hey","I+obey","By+my+Axe","Well+Met" ]
+
 pipeline {
     agent any
     parameters {
@@ -5,8 +7,6 @@ pipeline {
         text(   name: "VERSION",  defaultValue: "0.0.1")
         text(   name: "NAMESPACE",defaultValue: "default")
     }
-    testcals = ["Victory+or+Death","Lol","Okay","Hey","I+obey","By+my+Axe","Well+Met" ]
-
     stages {
         stage('Verification'){
             steps{
@@ -24,10 +24,16 @@ pipeline {
             }
         }
         stage('Test vocabuary') {
-                    steps {
-                        loop_of_sh(testcals)
-                    }
-                }
+            steps {
+                script {
+                   test_cals.each { item ->
+                       stage ("Testing $item") {
+                             sh "kubectl -n ${params.NAMESPACE} run testbox-${params.STACK} --image=nginx --restart=Never --rm -it -- curl ${params.STACK}-th3-server:8080/api/v1/translate?phrase=${item}"
+                       }
+                   }
+               }
+            }
+        }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
