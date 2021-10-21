@@ -34,6 +34,11 @@ pipeline {
                }
             }
         }
+        stage('Ready to flip?') {
+            steps {
+                input 'Would you like to make it LIVE?'
+            }
+        }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
