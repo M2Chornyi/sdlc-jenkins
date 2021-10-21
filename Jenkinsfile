@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        choice(name: 'STACK', choices: ['blue','green'], description: 'Select environment stack')
+        choice(name: 'STACK', choices: "choice", description: 'Select environment stack')
     }
     scm('')
     stages {
