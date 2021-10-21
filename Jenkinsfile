@@ -1,10 +1,13 @@
 pipeline {
     agent any
-
+    parameters {
+        choice(name: 'STACK', choices: ['blue','green'], description: 'Select environment stack')
+    }
+    scm('')
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                echo 'Building.. ${params.STACK}'
                 sh 'kubectl get all'
             }
         }
