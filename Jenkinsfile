@@ -3,7 +3,7 @@ pipeline {
     parameters {
         choice( name: 'STACK',    choices: ['blue','green'], description: 'Select environment stack')
         text(   name: "VERSION",  defaultValue: "0.0.1")
-        text(   name: "NAMESPACE",defaultValue: ["default"])
+        text(   name: "NAMESPACE",defaultValue: "default")
     }
     stages {
         stage('Verification'){
