@@ -3,7 +3,6 @@ pipeline {
     parameters {
         choice(name: 'STACK', choices: ['blue','green'], description: 'Select environment stack')
     }
-    scm('')
     stages {
         stage('Build') {
             steps {
