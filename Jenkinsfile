@@ -11,7 +11,7 @@ pipeline {
         stage('Build docker image'){
             steps{
                 sh 'eval $(minikube -p minikube docker-env)'
-                sh "docker build -t th3-python:${params.VERSION}"
+                sh "docker build -t th3-python:${params.VERSION} development-lyfecycle"
             }
         }
         stage('Verification'){
