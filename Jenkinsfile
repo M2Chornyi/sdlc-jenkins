@@ -5,6 +5,8 @@ pipeline {
         text(   name: "VERSION",  defaultValue: "0.0.1")
         text(   name: "NAMESPACE",defaultValue: "default")
     }
+    testcals = ["Victory+or+Death","Lol","Okay","Hey","I+obey","By+my+Axe","Well+Met" ]
+
     stages {
         stage('Verification'){
             steps{
@@ -16,16 +18,27 @@ pipeline {
                 sh "helm -n ${params.NAMESPACE} upgrade -i ${params.STACK} development-lyfecycle/th3-server --set image.tag=${params.VERSION} --set stack=${params.STACK}"
             }
         }
-        stage('Test') {
+        stage('Test version') {
             steps {
                 sh "kubectl -n ${params.NAMESPACE} run testbox-${params.STACK} --image=nginx --restart=Never --rm -it -- curl ${params.STACK}-th3-server:8080/version"
-                sh """for i in "Victory+or+Death" "Lol" "Okay" "Hey" "I+obey" "By+my+Axe" "Well+Met" ; do kubectl -n ${params.NAMESPACE} run testbox-${params.STACK} --image=nginx --restart=Never --rm -it -- curl ${params.STACK}-th3-server:8080/api/v1/translate?phrase=${i}; done"""
             }
         }
+        stage('Test vocabuary') {
+                    steps {
+                        loop_of_sh(testcals)
+                    }
+                }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
             }
+        }
+    }
+
+    @NonCPS
+    def loop_of_sh(list) {
+        list.each { item ->
+            sh "kubectl -n ${params.NAMESPACE} run testbox-${params.STACK} --image=nginx --restart=Never --rm -it -- curl ${params.STACK}-th3-server:8080/api/v1/translate?phrase=${item}"
         }
     }
 }
