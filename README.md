@@ -14,12 +14,20 @@ Using public cloud technology under their free tier is also fine!
 ## TASKS:
 Setup `blue/green` deployment.
 
+---
 Requirements:
 - Kubernetes cluster
 - Jenkins
   - Node requirement:
     - Kubernetes access
     - Helm installed
-    - Docker installed 
+    - Docker installed
+---
+WORKFLOW:
+1. Build docker image
+2. Create customer facing service
+3. Provision resources using kubernetes+docker image
+4. Test resources 
+5. Flip if needed
 
     
