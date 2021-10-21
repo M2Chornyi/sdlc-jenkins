@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Build docker image'){
             steps{
-                sh "docker build -t th3-python:${parms.VERSION} "
+                sh "eval $(minikube -p minikube docker-env) && docker build -t th3-python:${parms.VERSION} "
             }
         }
         stage('Verification'){
